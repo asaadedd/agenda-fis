@@ -1,0 +1,26 @@
+Cerinte Agenda Electronica:
+
+- inserare eveniment
+	> titlu
+	> descriere
+	> interval de timp(data + ora inceput, sfarsit)
+	> factor de recurenta
+	> culoare (hex)
+
+- accesare eveniment
+	- vizualizare eveniment		
+	- modificare eveniment (+ alarma)
+	- anulare/stergere eveniment
+
+- vizualizare lista evenimente
+	-> accesare eveniment
+- vizualizare evenimente intr-o zi
+	-> accesare eveniment
+- vizualizare saptamana, cu zile
+	-> accesare eveniment
+- vizualizare luna, pe zile
+	-> accesare eveniment
+- vizualizare an, pe luni
+	-> accesare zi
+
+
