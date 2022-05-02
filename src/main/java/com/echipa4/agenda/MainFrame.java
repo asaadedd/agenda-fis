@@ -13,6 +13,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Tree;
 
 import main.java.com.echipa4.agenda.Interfaces.CalendarTypes;
+import main.java.com.echipa4.agenda.View.AddEvenimentDialog;
 import main.java.com.echipa4.agenda.View.Calendar;
 
 import org.eclipse.swt.layout.RowLayout;
@@ -22,6 +23,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Table;
+import swing2swt.layout.BoxLayout;
 
 public class MainFrame {
 
@@ -64,16 +66,31 @@ public class MainFrame {
 		shell.setMinimumSize(new Point(1000, 800));
 		shell.setSize(450, 300);
 		shell.setText("Agenda");
-		RowLayout rl_shell = new RowLayout(SWT.VERTICAL);
-		rl_shell.center = true;
-		rl_shell.fill = true;
-		shell.setLayout(rl_shell);
 		createToolBar(shell);
 		createCalendar(shell);
+		
+		Button btnNewButton = new Button(shell, SWT.NONE);
+		btnNewButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				AddEvenimentDialog dialog = new AddEvenimentDialog(shell, SWT.None);
+				
+				dialog.open();
+			}
+		});
+		btnNewButton.setText("Adauga eveniment");
+		calendar = new Calendar(shell, SWT.NONE, CalendarTypes.WEEKLY);
+		calendar.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
 	}
 	
 	private void createToolBar(Shell shell) {
+		shell.setLayout(new GridLayout(2, false));
 		ToolBar toolBar = new ToolBar(shell, SWT.FLAT);
+		GridData gd_toolBar = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_toolBar.widthHint = 876;
+		toolBar.setLayoutData(gd_toolBar);
 		
 		ToolItem tltmRadioItem = new ToolItem(toolBar, SWT.RADIO);
 		tltmRadioItem.addSelectionListener(new SelectionAdapter() {
@@ -104,6 +121,5 @@ public class MainFrame {
 	}
 	
 	private void createCalendar(Shell shell) {
-		calendar = new Calendar(shell, SWT.NONE, CalendarTypes.WEEKLY);
 	}
 }

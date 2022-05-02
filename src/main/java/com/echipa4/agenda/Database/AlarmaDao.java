@@ -10,6 +10,12 @@ import main.java.com.echipa4.agenda.Model.Alarma;
 public class AlarmaDao {
 	private static final String
 	INSERT = "INSERT INTO alarma (startAlarma, recurenta) VALUES (?, ?)";
+	private static final String
+	UPDATE = "UPDATE alarma SET startAlarma = ?, recurenta = ? WHERE id = ?";
+	private static final String
+	DELETE = "DELETE FROM alarma WHERE id = ?";
+	private static final String
+	FIND_ID = "SELECT * FROM alarma WHERE id = ?";
 	
 	private static AlarmaDao alarmaDaoInstance = null;
 	
@@ -44,4 +50,57 @@ public class AlarmaDao {
 		return alarma;
 	}
 	
+	public Alarma update(Alarma alarma) throws SQLException {
+		Connection c = Mysql.getInstance().getConnection();
+		
+		PreparedStatement pstmt = c.prepareStatement(UPDATE, PreparedStatement.RETURN_GENERATED_KEYS);
+
+		pstmt.setDate(1, alarma.getStartAlarma());
+		pstmt.setInt(2, alarma.getRecurenta());
+		pstmt.setLong(3, alarma.getId());
+
+		pstmt.executeUpdate();
+		pstmt.close();
+		c.close();
+		
+		return alarma;
+	}
+	
+	public void delete(Alarma alarma) throws SQLException {
+		Connection c = Mysql.getInstance().getConnection();
+		
+		PreparedStatement pstmt = c.prepareStatement(DELETE, PreparedStatement.RETURN_GENERATED_KEYS);
+		pstmt.setLong(1, alarma.getId());
+
+		pstmt.executeUpdate();
+		pstmt.close();
+		c.close();
+	}
+	
+	public Alarma getById(long id) throws SQLException {
+		Connection c = Mysql.getInstance().getConnection();
+		
+		PreparedStatement pstmt = c.prepareStatement(FIND_ID, PreparedStatement.RETURN_GENERATED_KEYS);
+		pstmt.setLong(1, id);
+		Alarma alarma = null;
+
+		ResultSet rset = pstmt.executeQuery();
+		if (rset.next()) {
+			alarma = createAlarma(rset);
+		}
+		pstmt.close();
+		c.close();
+		
+		return alarma;
+	}
+	
+	private Alarma createAlarma(ResultSet rset) throws SQLException {
+		Alarma alarma = new Alarma();
+		
+		alarma.setId(rset.getLong("id"));
+		alarma.setStartAlarma(rset.getDate("startAlarma"));
+		alarma.setRecurenta(rset.getInt("recurenta"));
+		
+		return alarma;
+	}
 }

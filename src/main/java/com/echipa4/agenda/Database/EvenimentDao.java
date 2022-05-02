@@ -1,5 +1,6 @@
 package main.java.com.echipa4.agenda.Database;
 
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,18 +14,12 @@ import main.java.com.echipa4.agenda.Model.Recurenta;
 public class EvenimentDao {
 	private static final String
 	INSERT = "INSERT INTO eveniment (title, descriere, idInterval, idRecurenta, culoare, idAlarma) VALUES (?, ?, ?, ?, ?, ?)";
-
 	private static final String
-	ALL = "SELECT * FROM eveniment";
-
-	private static final String 
-	FIND_BY_TITLE = "SELECT * FROM eveniment WHERE title = ?";
-	
+	UPDATE = "UPDATE eveniment SET title = ?, descriere = ?, idInterval = ?, idRecurenta = ?, culoare = ?, idAlarma = ? WHERE id = ?";
 	private static final String
-	FIND_BY_ID = "SELECT * FROM eveniment WHERE id = ?";
-
-	private static final String 
-	DELETE = "DELETE FROM eveniment where id = ?";
+	DELETE = "DELETE FROM eveniment WHERE id = ?";
+	private static final String
+	FIND_ID = "SELECT * FROM eveniment WHERE id = ?";
 	
 	private static EvenimentDao evenimentDaoInstance = null;
 	
@@ -34,15 +29,14 @@ public class EvenimentDao {
 		}
 		
 		return evenimentDaoInstance;
-	}
-	
+	}	
 	
 	public Eveniment insert(Eveniment eveniment) throws SQLException {
 		Connection c = Mysql.getInstance().getConnection();
 		
-		insertInterval(eveniment);
-		insertRecurenta(eveniment);
-		insertAlarma(eveniment);
+		this.insertInterval(eveniment);
+		this.insertAlarma(eveniment);
+		this.insertRecurenta(eveniment);
 		
 		PreparedStatement pstmt = c.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
 
@@ -67,7 +61,75 @@ public class EvenimentDao {
 		return eveniment;
 	}
 	
-	private void insertInterval(Eveniment eveniment) throws SQLException {	
+	public Eveniment update(Eveniment eveniment) throws SQLException {
+		Connection c = Mysql.getInstance().getConnection();
+		
+		this.updateInterval(eveniment);
+		this.updateRecurenta(eveniment);
+		this.updateAlarma(eveniment);
+		
+		PreparedStatement pstmt = c.prepareStatement(UPDATE, PreparedStatement.RETURN_GENERATED_KEYS);
+
+		pstmt.setString(1, eveniment.getTitlu());
+		pstmt.setString(2, eveniment.getDescriere());
+		pstmt.setLong(3, eveniment.getInterval().getId());
+		pstmt.setLong(4, eveniment.getRecurenta().getId());
+		pstmt.setString(5, eveniment.getCuloare().toString());
+		pstmt.setLong(5, eveniment.getAlarma().getId());
+
+		pstmt.executeUpdate();
+		pstmt.close();
+		c.close();
+		
+		return eveniment;
+	}
+	
+	public void delete(Eveniment eveniment) throws SQLException {
+		Connection c = Mysql.getInstance().getConnection();
+		
+		PreparedStatement pstmt = c.prepareStatement(DELETE, PreparedStatement.RETURN_GENERATED_KEYS);
+		pstmt.setLong(1, eveniment.getId());
+
+		pstmt.executeUpdate();
+		pstmt.close();
+		c.close();
+	}
+	
+	public Eveniment getById(long id) throws SQLException {
+		Connection c = Mysql.getInstance().getConnection();
+		
+		PreparedStatement pstmt = c.prepareStatement(FIND_ID, PreparedStatement.RETURN_GENERATED_KEYS);
+		pstmt.setLong(1, id);
+		Eveniment eveniment = null;
+
+		ResultSet rset = pstmt.executeQuery();
+		if (rset.next()) {
+			eveniment = createEveniment(rset);
+		}
+		pstmt.close();
+		c.close();
+		
+		return eveniment;
+	}
+	
+	private Eveniment createEveniment(ResultSet rset) throws SQLException {
+		Eveniment eveniment = new Eveniment();
+		
+		eveniment.setId(rset.getLong("id"));
+		eveniment.setTitlu(rset.getString("title"));
+		eveniment.setDescriere(rset.getString("descriere"));
+		eveniment.setInterval(IntervalDao.getInstance().getById(rset.getInt("idInterval")));
+		eveniment.setRecurenta(RecurentaDao.getInstance().getById(rset.getInt("idRecurenta")));
+		eveniment.setCuloare(Color.getColor(rset.getString("culoare")));
+		eveniment.setAlarma(AlarmaDao.getInstance().getById(rset.getInt("idAlarma")));
+		
+		return eveniment;
+	}
+	
+	private void insertInterval(Eveniment eveniment) throws SQLException {
+		if (eveniment.getInterval() == null) {
+			return;
+		}
 		IntervalDao intervalDao = IntervalDao.getInstance();	
 		
 		Interval newInterval = intervalDao.insert(eveniment.getInterval());
@@ -75,6 +137,9 @@ public class EvenimentDao {
 	}
 	
 	private void insertRecurenta(Eveniment eveniment) throws SQLException {
+		if (eveniment.getRecurenta() == null) {
+			return;
+		}
 		RecurentaDao recurentaDao = RecurentaDao.getInstance();
 		
 		Recurenta recurenta = recurentaDao.insert(eveniment.getRecurenta());
@@ -82,9 +147,52 @@ public class EvenimentDao {
 	}
 	
 	private void insertAlarma(Eveniment eveniment) throws SQLException {
+		if (eveniment.getAlarma() == null) {
+			return;
+		}
 		AlarmaDao alarmaDao = AlarmaDao.getInstance();
 		
 		Alarma alarma = alarmaDao.insert(eveniment.getAlarma());
+		eveniment.setAlarma(alarma);
+	}
+	
+	
+	private void updateInterval(Eveniment eveniment) throws SQLException {
+		if (eveniment.getInterval() == null) {
+			return;
+		}
+		if (eveniment.getInterval().getId() == null) {
+			return;
+		}
+		IntervalDao intervalDao = IntervalDao.getInstance();	
+		
+		Interval newInterval = intervalDao.update(eveniment.getInterval());
+		eveniment.setInterval(newInterval);
+	}
+	
+	private void updateRecurenta(Eveniment eveniment) throws SQLException {
+		if (eveniment.getRecurenta() == null) {
+			return;
+		}
+		if (eveniment.getInterval().getId() == null) {
+			return;
+		}
+		RecurentaDao recurentaDao = RecurentaDao.getInstance();
+		
+		Recurenta recurenta = recurentaDao.update(eveniment.getRecurenta());
+		eveniment.setRecurenta(recurenta);
+	}
+	
+	private void updateAlarma(Eveniment eveniment) throws SQLException {
+		if (eveniment.getAlarma() == null) {
+			return;
+		}
+		if (eveniment.getInterval().getId() == null) {
+			return;
+		}
+		AlarmaDao alarmaDao = AlarmaDao.getInstance();
+		
+		Alarma alarma = alarmaDao.update(eveniment.getAlarma());
 		eveniment.setAlarma(alarma);
 	}
 }

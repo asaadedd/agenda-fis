@@ -1,6 +1,9 @@
 package main.java.com.echipa4.agenda.Model;
 
 import java.awt.Color;
+import java.sql.SQLException;
+
+import main.java.com.echipa4.agenda.Database.EvenimentDao;
 
 public class Eveniment {
 	private long id;
@@ -65,5 +68,22 @@ public class Eveniment {
 	
 	public void setAlarma(Alarma alarma) {
 		this.alarma = alarma;
+	}
+	
+	public void save() throws SQLException {
+		EvenimentDao.getInstance().insert(this);
+	}
+	
+	private static Eveniment createEveniment() {
+		Interval interval = new Interval();
+		Recurenta recurenta = new Recurenta();
+		Alarma alarma = new Alarma();
+		Eveniment eveniment = new Eveniment();
+
+		eveniment.setAlarma(alarma);
+		eveniment.setRecurenta(recurenta);
+		eveniment.setInterval(interval);
+		
+		return eveniment;		
 	}
 }
