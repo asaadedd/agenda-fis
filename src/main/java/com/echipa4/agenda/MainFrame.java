@@ -13,7 +13,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Tree;
 
 import main.java.com.echipa4.agenda.Interfaces.CalendarTypes;
-import main.java.com.echipa4.agenda.View.AddEvenimentDialog;
+import main.java.com.echipa4.agenda.View.AddModifyEventDialog;
 import main.java.com.echipa4.agenda.View.Calendar;
 
 import org.eclipse.swt.layout.RowLayout;
@@ -73,9 +73,9 @@ public class MainFrame {
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				AddEvenimentDialog dialog = new AddEvenimentDialog(shell, SWT.None);
+				AddModifyEventDialog dialog = new AddModifyEventDialog(shell, SWT.None);
 				
-				dialog.open();
+				dialog.open(null);
 			}
 		});
 		btnNewButton.setText("Adauga eveniment");

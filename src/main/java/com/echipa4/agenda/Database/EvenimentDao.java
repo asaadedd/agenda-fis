@@ -13,7 +13,7 @@ import main.java.com.echipa4.agenda.Model.Recurenta;
 
 public class EvenimentDao {
 	private static final String
-	INSERT = "INSERT INTO eveniment (title, descriere, idInterval, idRecurenta, culoare, idAlarma) VALUES (?, ?, ?, ?, ?, ?)";
+	INSERT = "INSERT INTO eveniment (titlu, descriere, idInterval, idRecurenta, culoare, idAlarma) VALUES (?, ?, ?, ?, ?, ?)";
 	private static final String
 	UPDATE = "UPDATE eveniment SET title = ?, descriere = ?, idInterval = ?, idRecurenta = ?, culoare = ?, idAlarma = ? WHERE id = ?";
 	private static final String
@@ -42,17 +42,33 @@ public class EvenimentDao {
 
 		pstmt.setString(1, eveniment.getTitlu());
 		pstmt.setString(2, eveniment.getDescriere());
-		pstmt.setLong(3, eveniment.getInterval().getId());
-		pstmt.setLong(4, eveniment.getRecurenta().getId());
-		pstmt.setString(5, eveniment.getCuloare().toString());
-		pstmt.setLong(5, eveniment.getAlarma().getId());
+		if (eveniment.getInterval() != null) {
+			pstmt.setLong(3, eveniment.getInterval().getId());
+		} else {
+			pstmt.setNull(3, 0);
+		}
+		if (eveniment.getRecurenta() != null) {
+			pstmt.setLong(4, eveniment.getRecurenta().getId());
+		} else {
+			pstmt.setNull(4, 0);
+		}
+		if (eveniment.getCuloare() != null) {
+			pstmt.setString(5, eveniment.getCuloare().toString());
+		} else {
+			pstmt.setNull(5, 0);
+		}
+		if (eveniment.getAlarma() != null) {
+			pstmt.setLong(6, eveniment.getAlarma().getId());
+		} else {
+			pstmt.setNull(6, 0);
+		}
 
 		pstmt.executeUpdate();
 
 		ResultSet rset = pstmt.getGeneratedKeys();
 
 		rset.next();
-		Long idGenerated = rset.getLong("id");
+		Long idGenerated = rset.getLong(1);
 		eveniment.setId(idGenerated);
 
 		pstmt.close();

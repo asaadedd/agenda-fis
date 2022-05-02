@@ -28,4 +28,14 @@ public class Recurenta {
 	public void setRepetare(Reperate repetare) {
 		this.repetare = repetare;
 	}
+	
+	public Recurenta clone() {
+		Recurenta newRecurenta = new Recurenta();
+		
+		newRecurenta.setId(id);
+		newRecurenta.setRecurenta(recurenta);
+		newRecurenta.setRepetare(repetare);
+		
+		return newRecurenta;
+	}
 }

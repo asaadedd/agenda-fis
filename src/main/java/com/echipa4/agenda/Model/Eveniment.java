@@ -69,21 +69,24 @@ public class Eveniment {
 	public void setAlarma(Alarma alarma) {
 		this.alarma = alarma;
 	}
-	
-	public void save() throws SQLException {
-		EvenimentDao.getInstance().insert(this);
-	}
-	
-	private static Eveniment createEveniment() {
-		Interval interval = new Interval();
-		Recurenta recurenta = new Recurenta();
-		Alarma alarma = new Alarma();
-		Eveniment eveniment = new Eveniment();
 
-		eveniment.setAlarma(alarma);
-		eveniment.setRecurenta(recurenta);
-		eveniment.setInterval(interval);
+	public Eveniment clone() {
+		Eveniment newEvent = new Eveniment();
 		
-		return eveniment;		
+		newEvent.setId(id);
+		newEvent.setTitlu(titlu);
+		newEvent.setDescriere(descriere);
+		newEvent.setCuloare(culoare);
+		if (interval != null) {
+			newEvent.setInterval(interval.clone());
+		}
+		if (recurenta != null) {
+			newEvent.setRecurenta(recurenta.clone());
+		}
+		if (alarma != null) {
+			newEvent.setAlarma(alarma.clone());
+		}
+		
+		return newEvent;
 	}
 }

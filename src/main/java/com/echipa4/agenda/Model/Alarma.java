@@ -1,13 +1,11 @@
 package main.java.com.echipa4.agenda.Model;
 
 import java.sql.Date;
-import java.util.ArrayList;
 
 public class Alarma {
 	private long id;
 	private Date startAlarma;
 	private int recurenta;
-	private ArrayList<Date> timpiDeclansare;
 
 	public Long getId() {
 		return id;
@@ -31,5 +29,15 @@ public class Alarma {
 	
 	public void setRecurenta(int recurenta) {
 		this.recurenta = recurenta;
+	}
+	
+	public Alarma clone() {
+		Alarma newAlarma = new Alarma();
+		
+		newAlarma.setId(id);
+		newAlarma.setStartAlarma(startAlarma);
+		newAlarma.setRecurenta(recurenta);
+		
+		return newAlarma;
 	}
 }

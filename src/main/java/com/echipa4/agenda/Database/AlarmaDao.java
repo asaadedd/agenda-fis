@@ -41,7 +41,7 @@ public class AlarmaDao {
 		ResultSet rset = pstmt.getGeneratedKeys();
 
 		rset.next();
-		Long idGenerated = rset.getLong("id");
+		Long idGenerated = rset.getLong(1);
 		alarma.setId(idGenerated);
 
 		pstmt.close();

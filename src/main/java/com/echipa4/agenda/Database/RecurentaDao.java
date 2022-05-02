@@ -42,7 +42,7 @@ public class RecurentaDao {
 		ResultSet rset = pstmt.getGeneratedKeys();
 
 		rset.next();
-		Long idGenerated = rset.getLong("id");
+		Long idGenerated = rset.getLong(1);
 		recurenta.setId(idGenerated);
 
 		pstmt.close();

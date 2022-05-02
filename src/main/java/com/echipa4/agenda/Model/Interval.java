@@ -30,4 +30,14 @@ public class Interval {
 	public void setDataSfarsit(Date data_sfarsit) {
 		dataSfarsit = data_sfarsit;		
 	}
+	
+	public Interval clone() {
+		Interval newInterval = new Interval();
+	
+		newInterval.setId(id);
+		newInterval.setDataInceput(dataInceput);
+		newInterval.setDataSfarsit(dataSfarsit);
+		
+		return newInterval;
+	}
 }

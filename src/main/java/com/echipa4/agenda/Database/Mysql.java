@@ -6,8 +6,7 @@ import java.sql.SQLException;
 
 public class Mysql {
 	private static String url = "jdbc:mysql://127.0.0.1:3306/";
-	private static String database = "mailsystem";
-	private static String driver = "com.mysql.jdbc.Driver";
+	private static String database = "agenda";
 	private static String user = "root";
 	private static String password = "mysql";
 	private static Mysql mysql_instance = null;
@@ -22,7 +21,7 @@ public class Mysql {
 	
 	public Connection connection = null;
 	
-	public Connection getConnection() {
+	public Connection getConnection() throws SQLException {
 		if (connection == null) {
 			connection = openConnection();
 		}
@@ -30,17 +29,8 @@ public class Mysql {
 		return connection;
 	}
 	
-	private Connection openConnection() {   
-		try {
-			Class.forName(driver).newInstance();
-			Connection connection = DriverManager.getConnection(url + database, user, password);
-			return connection;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception ex){
-			System.err.println(
-				"Não foi possével salvar os dados! O Banco de dados não estão respondendo!");
-		}
-		return null;
+	private Connection openConnection() throws SQLException {
+		Connection connection = DriverManager.getConnection(url + database, user, password);
+		return connection;
 	}
 }
