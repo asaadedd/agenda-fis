@@ -24,6 +24,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Table;
 import swing2swt.layout.BoxLayout;
+import org.eclipse.swt.widgets.Group;
 
 public class MainFrame {
 
@@ -63,8 +64,9 @@ public class MainFrame {
 	 */
 	protected void createContents() {
 		shell = new Shell();
+		shell.setMaximumSize(new Point(1000, 800));
 		shell.setMinimumSize(new Point(1000, 800));
-		shell.setSize(450, 300);
+		shell.setSize(1000, 800);
 		shell.setText("Agenda");
 		createToolBar(shell);
 		createCalendar(shell);
@@ -81,15 +83,13 @@ public class MainFrame {
 		btnNewButton.setText("Adauga eveniment");
 		calendar = new Calendar(shell, SWT.NONE, CalendarTypes.WEEKLY);
 		calendar.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-		new Label(shell, SWT.NONE);
-		new Label(shell, SWT.NONE);
 	}
 	
 	private void createToolBar(Shell shell) {
 		shell.setLayout(new GridLayout(2, false));
 		ToolBar toolBar = new ToolBar(shell, SWT.FLAT);
 		GridData gd_toolBar = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_toolBar.widthHint = 876;
+		gd_toolBar.widthHint = 827;
 		toolBar.setLayoutData(gd_toolBar);
 		
 		ToolItem tltmRadioItem = new ToolItem(toolBar, SWT.RADIO);
