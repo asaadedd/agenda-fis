@@ -1,10 +1,8 @@
 package main.java.com.echipa4.agenda.Model;
 
-import java.sql.Date;
-
 public class Alarma {
 	private long id;
-	private Date startAlarma;
+	private int minutePornire;
 	private int recurenta;
 
 	public Long getId() {
@@ -15,12 +13,12 @@ public class Alarma {
 		this.id = id;
 	}
 	
-	public Date getStartAlarma() {
-		return startAlarma;
+	public int getMinutePornire() {
+		return minutePornire;
 	}
 	
-	public void setStartAlarma(Date startAlarma) {
-		this.startAlarma = startAlarma;
+	public void setMinutePornire(int minutePornire) {
+		this.minutePornire = minutePornire;
 	}
 	
 	public int getRecurenta() {
@@ -35,7 +33,7 @@ public class Alarma {
 		Alarma newAlarma = new Alarma();
 		
 		newAlarma.setId(id);
-		newAlarma.setStartAlarma(startAlarma);
+		newAlarma.setMinutePornire(minutePornire);
 		newAlarma.setRecurenta(recurenta);
 		
 		return newAlarma;

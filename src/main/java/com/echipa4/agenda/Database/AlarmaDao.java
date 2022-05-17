@@ -9,9 +9,9 @@ import main.java.com.echipa4.agenda.Model.Alarma;
 
 public class AlarmaDao {
 	private static final String
-	INSERT = "INSERT INTO alarma (startAlarma, recurenta) VALUES (?, ?)";
+	INSERT = "INSERT INTO alarma (minutePornire, recurenta) VALUES (?, ?)";
 	private static final String
-	UPDATE = "UPDATE alarma SET startAlarma = ?, recurenta = ? WHERE id = ?";
+	UPDATE = "UPDATE alarma SET minutePornire = ?, recurenta = ? WHERE id = ?";
 	private static final String
 	DELETE = "DELETE FROM alarma WHERE id = ?";
 	private static final String
@@ -33,7 +33,7 @@ public class AlarmaDao {
 		
 		PreparedStatement pstmt = c.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
 
-		pstmt.setDate(1, alarma.getStartAlarma());
+		pstmt.setInt(1, alarma.getMinutePornire());
 		pstmt.setInt(2, alarma.getRecurenta());
 
 		pstmt.executeUpdate();
@@ -55,7 +55,7 @@ public class AlarmaDao {
 		
 		PreparedStatement pstmt = c.prepareStatement(UPDATE, PreparedStatement.RETURN_GENERATED_KEYS);
 
-		pstmt.setDate(1, alarma.getStartAlarma());
+		pstmt.setInt(1, alarma.getMinutePornire());
 		pstmt.setInt(2, alarma.getRecurenta());
 		pstmt.setLong(3, alarma.getId());
 
@@ -98,7 +98,7 @@ public class AlarmaDao {
 		Alarma alarma = new Alarma();
 		
 		alarma.setId(rset.getLong("id"));
-		alarma.setStartAlarma(rset.getDate("startAlarma"));
+		alarma.setMinutePornire(rset.getInt("minutePornire"));
 		alarma.setRecurenta(rset.getInt("recurenta"));
 		
 		return alarma;

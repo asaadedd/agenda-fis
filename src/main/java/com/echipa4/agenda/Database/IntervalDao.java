@@ -4,18 +4,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import main.java.com.echipa4.agenda.Model.Interval;
 
 public class IntervalDao {
 	private static final String
-	INSERT = "INSERT INTO interval (dataInceput, dataSfarsit) VALUES (?, ?)";
+	INSERT = "INSERT INTO agenda.interval (dataInceput, dataSfarsit) VALUES (?, ?)";
 	private static final String
-	UPDATE = "UPDATE interval SET dataInceput = ?, dataSfarsit = ? WHERE id = ?";
+	UPDATE = "UPDATE agenda.interval SET dataInceput = ?, dataSfarsit = ? WHERE id = ?";
 	private static final String
-	DELETE = "DELETE FROM interval WHERE id = ?";
+	DELETE = "DELETE FROM agenda.interval WHERE id = ?";
 	private static final String
-	FIND_ID = "SELECT * FROM interval WHERE id = ?";
+	FIND_ID = "SELECT * FROM agenda.interval WHERE id = ?";
 	
 	private static IntervalDao intervalDaoInstance = null;
 	
@@ -33,8 +34,8 @@ public class IntervalDao {
 		
 		PreparedStatement pstmt = c.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
 
-		pstmt.setDate(1, interval.getDataInceput());
-		pstmt.setDate(2, interval.getDataSfarsit());
+		pstmt.setTimestamp(1, new Timestamp(interval.getDataInceput().getTime()));
+		pstmt.setTimestamp(2, new Timestamp(interval.getDataSfarsit().getTime()));
 
 		pstmt.executeUpdate();
 

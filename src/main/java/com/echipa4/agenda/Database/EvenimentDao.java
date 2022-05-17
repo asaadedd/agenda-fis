@@ -53,7 +53,7 @@ public class EvenimentDao {
 			pstmt.setNull(4, 0);
 		}
 		if (eveniment.getCuloare() != null) {
-			pstmt.setString(5, eveniment.getCuloare().toString());
+			pstmt.setInt(5, eveniment.getCuloare().getRGB());
 		} else {
 			pstmt.setNull(5, 0);
 		}
@@ -136,7 +136,7 @@ public class EvenimentDao {
 		eveniment.setDescriere(rset.getString("descriere"));
 		eveniment.setInterval(IntervalDao.getInstance().getById(rset.getInt("idInterval")));
 		eveniment.setRecurenta(RecurentaDao.getInstance().getById(rset.getInt("idRecurenta")));
-		eveniment.setCuloare(Color.getColor(rset.getString("culoare")));
+		eveniment.setCuloare(new Color(rset.getInt("culoare")));
 		eveniment.setAlarma(AlarmaDao.getInstance().getById(rset.getInt("idAlarma")));
 		
 		return eveniment;

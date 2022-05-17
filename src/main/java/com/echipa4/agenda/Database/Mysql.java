@@ -19,14 +19,8 @@ public class Mysql {
 		return mysql_instance;
 	}
 	
-	public Connection connection = null;
-	
 	public Connection getConnection() throws SQLException {
-		if (connection == null) {
-			connection = openConnection();
-		}
-		
-		return connection;
+		return openConnection();
 	}
 	
 	private Connection openConnection() throws SQLException {

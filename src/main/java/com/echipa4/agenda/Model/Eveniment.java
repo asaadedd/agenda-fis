@@ -1,9 +1,6 @@
 package main.java.com.echipa4.agenda.Model;
 
 import java.awt.Color;
-import java.sql.SQLException;
-
-import main.java.com.echipa4.agenda.Database.EvenimentDao;
 
 public class Eveniment {
 	private long id;
