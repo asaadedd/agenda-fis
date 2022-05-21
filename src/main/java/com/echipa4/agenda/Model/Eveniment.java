@@ -3,7 +3,7 @@ package main.java.com.echipa4.agenda.Model;
 import java.awt.Color;
 
 public class Eveniment {
-	private long id;
+	private long id = -1;
 	private String titlu;
 	private String descriere;
 	private Interval interval;

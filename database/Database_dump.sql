@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.28, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: agenda
+-- Host: localhost    Database: agenda
 -- ------------------------------------------------------
 -- Server version	8.0.28
 
@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `alarma`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `alarma` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `startAlarma` date DEFAULT NULL,
+  `minutePornire` int DEFAULT NULL,
   `recurenta` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -40,31 +40,32 @@ LOCK TABLES `alarma` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `evenimente`
+-- Table structure for table `eveniment`
 --
 
-DROP TABLE IF EXISTS `evenimente`;
+DROP TABLE IF EXISTS `eveniment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `evenimente` (
-  `id` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `eveniment` (
+  `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `titlu` varchar(45) DEFAULT NULL,
   `descriere` varchar(45) DEFAULT NULL,
   `idInterval` int DEFAULT NULL,
   `idRecurenta` int DEFAULT NULL,
   `culoare` varchar(45) DEFAULT NULL,
   `idAlarma` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `evenimente`
+-- Dumping data for table `eveniment`
 --
 
-LOCK TABLES `evenimente` WRITE;
-/*!40000 ALTER TABLE `evenimente` DISABLE KEYS */;
-/*!40000 ALTER TABLE `evenimente` ENABLE KEYS */;
+LOCK TABLES `eveniment` WRITE;
+/*!40000 ALTER TABLE `eveniment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `eveniment` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -76,8 +77,8 @@ DROP TABLE IF EXISTS `interval`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `interval` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `dataInceput` date DEFAULT NULL,
-  `dataSfarsit` date DEFAULT NULL,
+  `dataInceput` datetime DEFAULT NULL,
+  `dataSfarsit` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -100,8 +101,8 @@ DROP TABLE IF EXISTS `recurenta`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `recurenta` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `zile` int DEFAULT NULL,
-  `repetare` varchar(45) DEFAULT NULL,
+  `recurenta` int DEFAULT NULL,
+  `repetare` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -124,4 +125,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-11 19:01:05
+-- Dump completed on 2022-05-21 13:55:20

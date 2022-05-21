@@ -269,6 +269,7 @@ public class AddModifyEventDialog extends Dialog {
 		formToolkit.adapt(combo);
 		formToolkit.paintBordersFor(combo);
 		this.setControllVizibility(combo, this.eventController.shouldDisplayRepInputs(), true);
+		combo.select(1);
 		
 		lblNumarDeRepetari = new Label(shell, SWT.NONE);
 		GridData gd_lblNumarDeRepetari = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);

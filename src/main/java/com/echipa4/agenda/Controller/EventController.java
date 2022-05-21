@@ -2,6 +2,7 @@ package main.java.com.echipa4.agenda.Controller;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.eclipse.swt.widgets.DateTime;
@@ -15,6 +16,8 @@ import main.java.com.echipa4.agenda.Model.Reperate;
 
 public class EventController {
 	private static EventController evenimentControllerInstance = null;
+    private ArrayList<EventListener> listeners = new ArrayList<EventListener>();
+
 	
 	public static EventController getInstance() {
 		if (evenimentControllerInstance == null) { 
@@ -58,7 +61,6 @@ public class EventController {
 		cal.set(daySelector.getYear(), daySelector.getMonth(), daySelector.getDay(), timeSelector.getHours(), timeSelector.getMinutes());
 		
 		interval.setDataInceput(new Date(cal.getTimeInMillis()));
-		System.out.println("timestamps: " + cal.getTimeInMillis());
 	}
 	
 	public void setEndDate(DateTime daySelector, DateTime timeSelector) {
@@ -129,11 +131,15 @@ public class EventController {
 	
 	public boolean saveEvenimentToAdd() {
 		try {
-			EvenimentDao.getInstance().insert(this.eventToModify);
+			System.out.println(this.eventToModify.getId());
+			if (this.eventToModify.getId() == -1) {
+				EvenimentDao.getInstance().insert(this.eventToModify);
+			} else {
+				EvenimentDao.getInstance().update(this.eventToModify);
+			}
+			this.modifyEvents();
 			return true;
 		} catch (SQLException e) {
-
-			System.err.println(e.getMessage());
 			return false;
 		}
 	}
@@ -141,5 +147,21 @@ public class EventController {
 	public void cancelEvenimentToAdd() {
 		this.eventToModify = null;
 	}
-
+	
+    public void addEventListener(EventListener toAdd) {
+        listeners.add(toAdd);
+    }
+	
+	public ArrayList<Eveniment> getAll() {
+		try {
+			return EvenimentDao.getInstance().getAll();
+		} catch (SQLException e) {
+			return new ArrayList<Eveniment>();
+		}
+	}
+    
+    private void modifyEvents() {
+        for (EventListener hl : listeners)
+            hl.eventsUpdated();
+    }
 }

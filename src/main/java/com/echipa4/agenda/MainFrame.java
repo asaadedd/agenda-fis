@@ -12,9 +12,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Tree;
 
-import main.java.com.echipa4.agenda.Interfaces.CalendarTypes;
+import main.java.com.echipa4.agenda.Interfaces.EventViewTypes;
 import main.java.com.echipa4.agenda.View.AddModifyEventDialog;
-import main.java.com.echipa4.agenda.View.Calendar;
+import main.java.com.echipa4.agenda.View.EventView;
 
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.layout.RowData;
@@ -25,11 +25,18 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Table;
 import swing2swt.layout.BoxLayout;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Combo;
 
 public class MainFrame {
 
 	protected Shell shell;
-	private Calendar calendar;
+	private EventView calendar;
+	private ToolBar toolBar;
+	private ToolItem weeklyItem;
+	private ToolItem montlyItem;
+	private ToolItem yearlyItem;
 
 	/**
 	 * Launch the application.
@@ -81,43 +88,73 @@ public class MainFrame {
 			}
 		});
 		btnNewButton.setText("Adauga eveniment");
-		calendar = new Calendar(shell, SWT.NONE, CalendarTypes.WEEKLY);
-		calendar.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+		calendar = new EventView(shell, SWT.NONE, EventViewTypes.TABLE);
+		GridLayout gridLayout = (GridLayout) calendar.getLayout();
+		GridData gd_calendar = new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1);
+		gd_calendar.widthHint = 972;
+		calendar.setLayoutData(gd_calendar);
 	}
 	
 	private void createToolBar(Shell shell) {
-		shell.setLayout(new GridLayout(2, false));
-		ToolBar toolBar = new ToolBar(shell, SWT.FLAT);
+		shell.setLayout(new GridLayout(3, false));
+		
+		Combo combo = new Combo(shell, SWT.NONE);
+		combo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (combo.getSelectionIndex() == 1) {
+					toolBar.setVisible(true);
+					if (weeklyItem.getSelection()) {
+						calendar.changeType(EventViewTypes.CALENDAR_WEEKLY);
+					} else if (montlyItem.getSelection()) {
+						calendar.changeType(EventViewTypes.CALENDAR_MONTHLY);
+					} else if (yearlyItem.getSelection()) {
+						calendar.changeType(EventViewTypes.CALENDAR_YEARLY);
+					} else {
+						calendar.changeType(EventViewTypes.CALENDAR_WEEKLY);
+					}
+				} else {
+					toolBar.setVisible(false);	
+					calendar.changeType(EventViewTypes.TABLE);				
+				}
+			}
+		});
+		combo.setItems(new String[] {"Table", "Calendar"});
+		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		combo.select(0);
+		toolBar = new ToolBar(shell, SWT.FLAT);
 		GridData gd_toolBar = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_toolBar.widthHint = 827;
+		gd_toolBar.widthHint = 700;
 		toolBar.setLayoutData(gd_toolBar);
+		toolBar.setVisible(false);
 		
-		ToolItem tltmRadioItem = new ToolItem(toolBar, SWT.RADIO);
-		tltmRadioItem.addSelectionListener(new SelectionAdapter() {
+		weeklyItem = new ToolItem(toolBar, SWT.RADIO);
+		weeklyItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				calendar.changeType(CalendarTypes.WEEKLY);
+				calendar.changeType(EventViewTypes.CALENDAR_WEEKLY);
 			}
 		});
-		tltmRadioItem.setText("Saptamanal");
+		weeklyItem.setText("Saptamanal");
+		weeklyItem.setSelection(true);
 		
-		ToolItem tltmRadioItem_1 = new ToolItem(toolBar, SWT.RADIO);
-		tltmRadioItem_1.addSelectionListener(new SelectionAdapter() {
+		montlyItem = new ToolItem(toolBar, SWT.RADIO);
+		montlyItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				calendar.changeType(CalendarTypes.MONTHLY);
+				calendar.changeType(EventViewTypes.CALENDAR_MONTHLY);
 			}
 		});
-		tltmRadioItem_1.setText("Lunar");
+		montlyItem.setText("Lunar");
 		
-		ToolItem tltmRadioItem_2 = new ToolItem(toolBar, SWT.RADIO);
-		tltmRadioItem_2.addSelectionListener(new SelectionAdapter() {
+		yearlyItem = new ToolItem(toolBar, SWT.RADIO);
+		yearlyItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				calendar.changeType(CalendarTypes.YEARLY);
+				calendar.changeType(EventViewTypes.CALENDAR_YEARLY);
 			}
 		});
-		tltmRadioItem_2.setText("Anual");
+		yearlyItem.setText("Anual");
 	}
 	
 	private void createCalendar(Shell shell) {
