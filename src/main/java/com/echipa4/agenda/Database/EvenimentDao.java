@@ -89,10 +89,28 @@ public class EvenimentDao {
 
 		pstmt.setString(1, eveniment.getTitlu());
 		pstmt.setString(2, eveniment.getDescriere());
-		pstmt.setLong(3, eveniment.getInterval().getId());
-		pstmt.setLong(4, eveniment.getRecurenta().getId());
-		pstmt.setString(5, eveniment.getCuloare().toString());
-		pstmt.setLong(5, eveniment.getAlarma().getId());
+		if (eveniment.getInterval() != null) {
+			pstmt.setLong(3, eveniment.getInterval().getId());
+		} else {
+			pstmt.setNull(3, 0);
+		}
+		if (eveniment.getRecurenta() != null) {
+			pstmt.setLong(4, eveniment.getRecurenta().getId());
+		} else {
+			pstmt.setNull(4, 0);
+		}
+		if (eveniment.getCuloare() != null) {
+			pstmt.setInt(5, eveniment.getCuloare().getRGB());
+		} else {
+			pstmt.setNull(5, 0);
+		}
+		if (eveniment.getAlarma() != null) {
+			pstmt.setLong(6, eveniment.getAlarma().getId());
+		} else {
+			pstmt.setNull(6, 0);
+		}
+
+		pstmt.setLong(7, eveniment.getId());
 
 		pstmt.executeUpdate();
 		pstmt.close();
@@ -153,8 +171,6 @@ public class EvenimentDao {
 		
 		pstmt.setTimestamp(1, new Timestamp(startDate.getTime()));
 		pstmt.setTimestamp(2, new Timestamp(endDate.getTime()));
-		
-		System.out.println(pstmt);
 
 		ResultSet rset = pstmt.executeQuery();
 		while (rset.next()) {
@@ -215,6 +231,7 @@ public class EvenimentDao {
 			return;
 		}
 		if (eveniment.getInterval().getId() == null) {
+			insertInterval(eveniment);
 			return;
 		}
 		IntervalDao intervalDao = IntervalDao.getInstance();
@@ -227,7 +244,8 @@ public class EvenimentDao {
 		if (eveniment.getRecurenta() == null) {
 			return;
 		}
-		if (eveniment.getInterval().getId() == null) {
+		if (eveniment.getRecurenta().getId() == null) {
+			insertRecurenta(eveniment);
 			return;
 		}
 		RecurentaDao recurentaDao = RecurentaDao.getInstance();
@@ -240,7 +258,8 @@ public class EvenimentDao {
 		if (eveniment.getAlarma() == null) {
 			return;
 		}
-		if (eveniment.getInterval().getId() == null) {
+		if (eveniment.getAlarma().getId() == null) {
+			insertAlarma(eveniment);
 			return;
 		}
 		AlarmaDao alarmaDao = AlarmaDao.getInstance();

@@ -20,5 +20,6 @@
 	<classpathentry kind="lib" path="C:/Users/saade/.p2/pool/plugins/org.eclipse.ui.forms_3.11.300.v20211022-1451.jar" sourcepath="C:/Users/saade/.p2/pool/plugins/org.eclipse.ui.forms_3.11.300.v20211022-1451.jar"/>
 	<classpathentry kind="lib" path="swing2swt.jar"/>
 	<classpathentry kind="lib" path="C:/Users/saade/Downloads/mysql-connector-java-8.0.29.tar/mysql-connector-java-8.0.29/mysql-connector-java-8.0.29.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

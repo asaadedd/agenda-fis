@@ -10,12 +10,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import main.java.com.echipa4.agenda.Controller.EventController;
 import main.java.com.echipa4.agenda.Controller.EventViewController;
 import main.java.com.echipa4.agenda.Controller.EventViewListener;
 import main.java.com.echipa4.agenda.Interfaces.EventViewTypes;
 
 public class EventToolbar extends Composite {
 	private EventViewController eventViewController = EventViewController.getInstance();
+	private EventController eventController = EventController.getInstance();
 	private ToolBar toolBar;
 	private ToolItem dailyItem;
 	private ToolItem weeklyItem;
@@ -149,6 +151,8 @@ public class EventToolbar extends Composite {
 		
 		dialog.open(null);
 		btnNewButton.setEnabled(true);
+
+		eventController.cancelEvenimentToAdd();
 	}
 
 }

@@ -149,12 +149,24 @@ public class EventController {
 			this.modifyEvents();
 			return true;
 		} catch (SQLException e) {
+			System.out.println(e);
 			return false;
 		}
 	}
 	
 	public void cancelEvenimentToAdd() {
 		this.eventToModify = null;
+	}
+	
+	public void deleteEvenimentToAdd() {
+		if (this.eventToModify.getId() != -1) {
+			try {
+				EvenimentDao.getInstance().delete(eventToModify);
+				this.modifyEvents();
+			} catch (SQLException e) {
+				System.out.println(e);
+			}
+		}
 	}
 	
     public void addEventListener(EventListener toAdd) {

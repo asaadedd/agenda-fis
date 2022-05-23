@@ -32,7 +32,7 @@ public class CalendarMonthly extends Composite {
 	private Label lblNewLabel_5;
 	private Label lblNewLabel_6;
 	private Label lblNewLabel_7;
-	private ArrayList<Control> days = new ArrayList<Control>();
+	private ArrayList<Composite> days = new ArrayList<Composite>();
 	private ArrayList<Eveniment> events = new ArrayList<Eveniment>();
 	private EventController eventController = EventController.getInstance();
 	private EventViewController eventViewController = EventViewController.getInstance();
@@ -168,14 +168,15 @@ public class CalendarMonthly extends Composite {
 			Date startDate = getDate(day);
 			Date endDate = getDate(day + 1);
 			String header = day == 0 ? calendarController.getCurrentShortMonth(currentDate.get(Calendar.MONTH)) + " " + (day + 1) : ( day + 1) + "";
+			System.out.println("startDate " + startDate);
+			System.out.println("endDate " + endDate);
 			CalendarEvents label = new CalendarEvents(this, SWT.BORDER | SWT.CENTER, eventController.getEventsForPeriod(events, startDate, endDate), header);
-			GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+			GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 			gridData.widthHint = 150;
 			label.setLayoutData(gridData);
 			
 			days.add(label);
 		}
-		updateHeights();
 		this.layout(true);
 	}
 	
@@ -191,39 +192,12 @@ public class CalendarMonthly extends Composite {
 			int daysInMonth = calendarController.getDaysInMonth(previousMonth);
 			String header = (daysInMonth - daysToAdd + day) + "";
 			CalendarEvents label = new CalendarEvents(this, SWT.BORDER | SWT.CENTER, eventController.getEventsForPeriod(events, startDate, endDate), header);
-			GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+			GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 			gridData.widthHint = 150;
 			label.setLayoutData(gridData);
 			
 			days.add(label);
 		}
-	}
-	
-	private void updateHeights() {
-		int maxHeight = 0;
-		ArrayList<Control> controls = new ArrayList<Control>();
-		for(int index = 0; index < days.size(); index++) {
-			Control control = days.get(index);
-			
-			if (control.computeSize(SWT.DEFAULT, SWT.DEFAULT).y > maxHeight) {
-				maxHeight = control.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-			}
-
-			controls.add(control);
-			
-			boolean isSunday = (index + 1) % 7 == 0;
-			boolean isEndOfMonth = index == (days.size() - 1);
-			
-			if (isSunday || isEndOfMonth) {
-				for (Control ctr: controls) {
-					GridData gridData = (GridData) ctr.getLayoutData();
-					gridData.heightHint = maxHeight;
-				}
-				controls.clear();
-				maxHeight = 0;
-			}
-		}
-		
 	}
 	
 	private Date getDate(int day) {

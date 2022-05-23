@@ -167,12 +167,11 @@ public class CalendarWeekly extends Composite {
 
 		for(int hour = 0; hour < 24; hour++) {
 			Label hoursNumber = new Label(this, SWT.BORDER | SWT.CENTER);
-			GridData hoursGridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+			GridData hoursGridData = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 			hoursGridData.widthHint = 50;
 			hoursNumber.setLayoutData(hoursGridData);
 			String hourText = hour < 10 ? "0" + hour + ":00" : hour + ":00";
 			hoursNumber.setText(hourText);
-			int maxHeight = 0;
 			
 			hours.add(hoursNumber);
 			
@@ -186,24 +185,12 @@ public class CalendarWeekly extends Composite {
 				Date startDate = getDate(day, hour);
 				Date endDate = getDate(endDateDay, endDateHour);
 				CalendarEvents label = new CalendarEvents(this, SWT.BORDER | SWT.CENTER, eventController.getEventsForPeriod(events, startDate, endDate));
-				GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+				GridData gridData = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 				gridData.widthHint = 150;
 				label.setLayoutData(gridData);
 				
 				
-				if (label.computeSize(SWT.DEFAULT, SWT.DEFAULT).y > maxHeight) {
-					maxHeight = label.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-				}
-				
-				
 				hours.add(label);
-			}
-
-			for (int index = 1; index <= 8; index ++) {
-				Control control = hours.get(hours.size() - index);
-				
-				GridData gridData = (GridData) control.getLayoutData();
-				gridData.heightHint = maxHeight;
 			}
 		}
 		this.layout(true);

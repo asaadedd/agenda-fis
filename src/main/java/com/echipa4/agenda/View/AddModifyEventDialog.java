@@ -9,6 +9,9 @@ import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+
+import com.ibm.icu.util.Calendar;
+
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ColorDialog;
@@ -62,6 +65,7 @@ public class AddModifyEventDialog extends Dialog {
 	private ArrayList<Label> repLabels = new ArrayList<Label>(2);
 	private ArrayList<Label> alarmLabels = new ArrayList<Label>(2);
 	private RGB color;
+	private Button btnSterge;
 
 	/**
 	 * Create the dialog.
@@ -201,9 +205,13 @@ public class AddModifyEventDialog extends Dialog {
 		
 		Interval internal = this.eventController.getEvenimentToModify().getInterval();
 		boolean isIntervalPresent = internal != null;
-		boolean isStartDateValid = isIntervalPresent && internal.getDataSfarsit() != null;
+		boolean isStartDateValid = isIntervalPresent && internal.getDataInceput() != null;
 		if (isStartDateValid) {
-			dateTime_1.setData(internal.getDataInceput());
+			Calendar dateInCalendar = Calendar.getInstance();
+			dateInCalendar.setTimeInMillis(internal.getDataInceput().getTime());
+			
+			dateTime.setDate(dateInCalendar.get(Calendar.YEAR), dateInCalendar.get(Calendar.MONTH), dateInCalendar.get(Calendar.DATE));
+			dateTime_1.setTime(dateInCalendar.get(Calendar.HOUR), dateInCalendar.get(Calendar.MINUTE), dateInCalendar.get(Calendar.SECOND));
 		}
 	}
 	
@@ -229,12 +237,16 @@ public class AddModifyEventDialog extends Dialog {
 		formToolkit.adapt(dateTime_3);
 		formToolkit.paintBordersFor(dateTime_3);
 		
-//		Interval internal = this.eventController.getEvenimentToModify().getInterval();
-//		boolean isIntervalPresent = internal != null;
-//		boolean isEndDateValid = isIntervalPresent && internal.getDataSfarsit() != null;
-//		if (isEndDateValid) {
-//			dateTime_1.setData(internal.getDataSfarsit());
-//		}
+		Interval internal = this.eventController.getEvenimentToModify().getInterval();
+		boolean isIntervalPresent = internal != null;
+		boolean isEndDateValid = isIntervalPresent && internal.getDataSfarsit() != null;
+		if (isEndDateValid) {
+			Calendar dateInCalendar = Calendar.getInstance();
+			dateInCalendar.setTimeInMillis(internal.getDataSfarsit().getTime());
+			
+			dateTime_2.setDate(dateInCalendar.get(Calendar.YEAR), dateInCalendar.get(Calendar.MONTH), dateInCalendar.get(Calendar.DATE));
+			dateTime_3.setTime(dateInCalendar.get(Calendar.HOUR), dateInCalendar.get(Calendar.MINUTE), dateInCalendar.get(Calendar.SECOND));
+		}
 	}
 	
 	private void addRepInputs() {
@@ -359,7 +371,7 @@ public class AddModifyEventDialog extends Dialog {
 	private void addSaveAndCancelInputs() {
 		btnAnuleaza = new Button(shell, SWT.NONE);
 		GridData gd_btnSalveaza = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_btnSalveaza.widthHint = 138;
+		gd_btnSalveaza.widthHint = 140;
 		btnAnuleaza.setLayoutData(gd_btnSalveaza);
 		btnAnuleaza.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -371,7 +383,22 @@ public class AddModifyEventDialog extends Dialog {
 		});
 		formToolkit.adapt(btnAnuleaza, true, true);
 		btnAnuleaza.setText("Anuleaza");
-		new Label(shell, SWT.NONE);
+		
+		btnSterge = new Button(shell, SWT.NONE);
+		GridData gd_btnSterge = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnSterge.widthHint = 140;
+		btnSterge.setLayoutData(gd_btnSterge);
+		formToolkit.adapt(btnSterge, true, true);
+		btnSterge.setText("Sterge");
+		btnSterge.setVisible(eventController.getEvenimentToModify().getId() != -1);
+		btnSterge.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				eventController.deleteEvenimentToAdd();
+				result = false;
+				shell.close();
+			}
+		});
 		
 		btnSalveaza = new Button(shell, SWT.NONE);
 		btnSalveaza.addSelectionListener(new SelectionAdapter() {
@@ -433,7 +460,7 @@ public class AddModifyEventDialog extends Dialog {
 			}
 		});
 		GridData gd_btnAnuleaza = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
-		gd_btnAnuleaza.widthHint = 145;
+		gd_btnAnuleaza.widthHint = 140;
 		btnSalveaza.setLayoutData(gd_btnAnuleaza);
 		formToolkit.adapt(btnSalveaza, true, true);
 		btnSalveaza.setText("Salveaza");

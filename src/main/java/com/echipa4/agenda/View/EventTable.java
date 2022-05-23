@@ -2,7 +2,10 @@ package main.java.com.echipa4.agenda.View;
 
 import org.eclipse.swt.widgets.Composite;
 
+import java.util.ArrayList;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridLayout;
@@ -10,6 +13,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Button;
 
 import main.java.com.echipa4.agenda.Controller.EventController;
 import main.java.com.echipa4.agenda.Controller.EventListener;
@@ -35,7 +39,7 @@ public class EventTable extends Composite {
 		table.setTouchEnabled(false);
 
 		
-		TableColumn colorColumn = new TableColumn(table, SWT.HIDE_SELECTION);
+		TableColumn colorColumn = new TableColumn(table, SWT.MULTI);
 		colorColumn.setWidth(75);
 		
 		TableColumn tblclmnNewColumn = new TableColumn(table, SWT.NONE | SWT.HIDE_SELECTION);
@@ -62,6 +66,12 @@ public class EventTable extends Composite {
 		tblclmnAlarma.setWidth(200);
 		tblclmnAlarma.setText("Alarma");
 		
+		TableColumn tblclmnNewColumn_1 = new TableColumn(table, SWT.NONE);
+		tblclmnNewColumn_1.setWidth(100);
+		
+		TableColumn tblclmnNewColumn_2 = new TableColumn(table, SWT.NONE);
+		tblclmnNewColumn_2.setWidth(100);
+		
 		updateEventsInTable();
 		
 		eventController.addEventListener(new EventListener() {
@@ -74,8 +84,22 @@ public class EventTable extends Composite {
 	}
 	
 	private void updateEventsInTable() {
-		table.setItemCount(0);;
-		eventController.getAll().forEach((event) -> this.addEvenimentToTable(event));
+		ArrayList<Eveniment> events = eventController.getAll();
+		table.setItemCount(0);
+		events.forEach((event) -> this.addEvenimentToTable(event));
+	    TableItem[] items = table.getItems();		
+
+		for(int index = 0; index < table.getItemCount(); index++) {
+			TableEditor editor = new TableEditor(table);
+			Button editButton = new Button(table, SWT.NONE);
+			editButton.setText("edit");
+		    editor.setEditor(editButton, items[index], 7);
+		    
+			editor = new TableEditor(table);
+			Button deleteButton = new Button(table, SWT.NONE);
+			editButton.setText("delete");
+		    editor.setEditor(deleteButton, items[index], 8);
+		}
 	}
 	
 	private void addEvenimentToTable(Eveniment event) {
