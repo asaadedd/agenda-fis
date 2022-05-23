@@ -12,7 +12,16 @@ import main.java.com.echipa4.agenda.Model.Alarma;
 import main.java.com.echipa4.agenda.Model.Eveniment;
 import main.java.com.echipa4.agenda.Model.Interval;
 import main.java.com.echipa4.agenda.Model.Recurenta;
-import main.java.com.echipa4.agenda.Model.Reperate;
+
+class Period {
+	public Date startDate;
+	public Date endDate;
+	
+	public Period(Date startDate, Date endDate) {
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
+}
 
 public class EventController {
 	private static EventController evenimentControllerInstance = null;
@@ -154,14 +163,98 @@ public class EventController {
 	
 	public ArrayList<Eveniment> getAll() {
 		try {
-			return EvenimentDao.getInstance().getAll();
+			return EvenimentDao.getInstance().getEvents();
 		} catch (SQLException e) {
 			return new ArrayList<Eveniment>();
 		}
+	}
+
+	public ArrayList<Eveniment> getEventsForPeriod(ArrayList<Eveniment> allEvents, Date startDate, Date endDate) {
+		ArrayList<Eveniment> eventsForPeriod = new ArrayList<Eveniment>();
+		
+		for (Eveniment event: allEvents) {
+			ArrayList<Period> viziblePeriods = getAllVisiblePeriodsForEvent(event);
+			boolean isAnyPeriodBetweenDates = isAnyViziblePeriodBetweenDate(viziblePeriods, startDate, endDate);
+			
+			if (isAnyPeriodBetweenDates) {
+				eventsForPeriod.add(event);
+			}
+		}
+			
+		return eventsForPeriod;
 	}
     
     private void modifyEvents() {
         for (EventListener hl : listeners)
             hl.eventsUpdated();
+    }
+    
+    private boolean isAnyViziblePeriodBetweenDate(ArrayList<Period> periods, Date startDate, Date endDate) {
+    	boolean isBetweenDates = false;
+    	
+    	for (Period period: periods) {
+    		boolean isBiggerThenStartDate = period.startDate.compareTo(startDate) >= 0;
+    		boolean isLesserThenEndDate = period.endDate.compareTo(endDate) < 0;
+    		isBetweenDates = isBetweenDates || ( isBiggerThenStartDate && isLesserThenEndDate );
+    	}
+    	
+    	return isBetweenDates;
+    }
+    
+    private ArrayList<Period> getAllVisiblePeriodsForEvent(Eveniment event) {
+    	ArrayList<Period> periods = new ArrayList<Period>();
+    	Interval interval = event.getInterval();
+    	
+    	if (interval != null) {
+    		periods.add(new Period(interval.getDataInceput(), interval.getDataSfarsit()));
+    	}
+    	
+    	periods.addAll(getAllRecurringPeriodsForEvent(event));
+    	
+    	return periods;
+    }
+    
+    private ArrayList<Period> getAllRecurringPeriodsForEvent(Eveniment event) {
+    	ArrayList<Period> periods = new ArrayList<Period>();
+		Recurenta recurenta = event.getRecurenta();
+		
+		if (recurenta != null) {
+			for(int i=1; i<= recurenta.getRecurenta(); i++) {
+				Calendar periodStartDate = Calendar.getInstance();
+				Calendar periodEndDate = Calendar.getInstance();
+				int periodToAdd = getPeriodToAddFromRecurenta(recurenta);
+				
+				if (periodToAdd != -1) {
+					periodStartDate.add(periodToAdd, i);
+					periodEndDate.add(periodToAdd, i);
+				}
+
+	    		periods.add(new Period(new Date(periodStartDate.getTimeInMillis()), new Date(periodEndDate.getTimeInMillis())));
+			}
+		}
+    	
+    	return periods;
+    }
+    
+    private int getPeriodToAddFromRecurenta(Recurenta recurenta) {
+		int periodToAdd = -1;
+		switch (recurenta.getReperate()) {
+		case DAILY:
+			periodToAdd = Calendar.DATE;
+			break;
+		case WEEKLY:
+			periodToAdd = Calendar.WEEK_OF_YEAR;
+			break;
+		case MONTHLY:
+			periodToAdd = Calendar.MONTH;
+			break;
+		case YEARLY:
+			periodToAdd = Calendar.YEAR;
+			break;
+		default:
+			break;
+		}
+		
+		return periodToAdd;
     }
 }

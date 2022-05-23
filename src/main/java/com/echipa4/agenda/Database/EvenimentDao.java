@@ -2,9 +2,11 @@ package main.java.com.echipa4.agenda.Database;
 
 import java.awt.Color;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import main.java.com.echipa4.agenda.Model.Alarma;
@@ -18,6 +20,7 @@ public class EvenimentDao {
 	private static final String DELETE = "DELETE FROM eveniment WHERE id = ?";
 	private static final String FIND_ID = "SELECT * FROM eveniment WHERE id = ?";
 	private static final String FIND_ALL = "SELECT * FROM eveniment";
+	private static final String FIND_BETWEEN_DATES = "SELECT * FROM eveniment e LEFT JOIN agenda.interval i ON e.idInterval = i.id WHERE i.dataInceput >= ? OR i.dataSfarsit <= ?";
 
 	private static EvenimentDao evenimentDaoInstance = null;
 
@@ -126,11 +129,32 @@ public class EvenimentDao {
 		return eveniment;
 	}
 
-	public ArrayList<Eveniment> getAll() throws SQLException {
+	public ArrayList<Eveniment> getEvents() throws SQLException {
 		Connection c = Mysql.getInstance().getConnection();
 
 		PreparedStatement pstmt = c.prepareStatement(FIND_ALL, PreparedStatement.RETURN_GENERATED_KEYS);
 		ArrayList<Eveniment> eveniment = new ArrayList<Eveniment>();
+
+		ResultSet rset = pstmt.executeQuery();
+		while (rset.next()) {
+			eveniment.add(createEveniment(rset));
+		}
+		pstmt.close();
+		c.close();
+
+		return eveniment;
+	}
+
+	public ArrayList<Eveniment> getEvents(Date startDate, Date endDate) throws SQLException {
+		Connection c = Mysql.getInstance().getConnection();
+
+		PreparedStatement pstmt = c.prepareStatement(FIND_BETWEEN_DATES, PreparedStatement.RETURN_GENERATED_KEYS);
+		ArrayList<Eveniment> eveniment = new ArrayList<Eveniment>();
+		
+		pstmt.setTimestamp(1, new Timestamp(startDate.getTime()));
+		pstmt.setTimestamp(2, new Timestamp(endDate.getTime()));
+		
+		System.out.println(pstmt);
 
 		ResultSet rset = pstmt.executeQuery();
 		while (rset.next()) {

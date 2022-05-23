@@ -1,6 +1,7 @@
 package main.java.com.echipa4.agenda.View;
 
 import org.eclipse.swt.widgets.Composite;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
@@ -70,11 +71,6 @@ public class EventTable extends Composite {
 		    }
 		});
 		
-	}
-
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
 	}
 	
 	private void updateEventsInTable() {

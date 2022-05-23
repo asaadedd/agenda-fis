@@ -1,6 +1,7 @@
 package main.java.com.echipa4.agenda.Database;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -99,8 +100,8 @@ public class IntervalDao {
 		Interval interval = new Interval();
 		
 		interval.setId(rset.getLong("id"));
-		interval.setDataInceput(rset.getDate("dataInceput"));
-		interval.setDataSfarsit(rset.getDate("dataSfarsit"));
+		interval.setDataInceput(new Date(rset.getTimestamp("dataInceput").getTime()));
+		interval.setDataSfarsit(new Date(rset.getTimestamp("dataSfarsit").getTime()));
 		
 		return interval;
 	}
