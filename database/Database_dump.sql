@@ -27,7 +27,7 @@ CREATE TABLE `alarma` (
   `minutePornire` int DEFAULT NULL,
   `recurenta` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,6 +36,7 @@ CREATE TABLE `alarma` (
 
 LOCK TABLES `alarma` WRITE;
 /*!40000 ALTER TABLE `alarma` DISABLE KEYS */;
+INSERT INTO `alarma` VALUES (1,10,1);
 /*!40000 ALTER TABLE `alarma` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -56,7 +57,7 @@ CREATE TABLE `eveniment` (
   `idAlarma` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,6 +66,7 @@ CREATE TABLE `eveniment` (
 
 LOCK TABLES `eveniment` WRITE;
 /*!40000 ALTER TABLE `eveniment` DISABLE KEYS */;
+INSERT INTO `eveniment` VALUES (0000000001,'Lab FIS','LAboratul FIS B623',1,1,'-8323200',1),(0000000002,'Lab TP','',2,2,'-128',NULL),(0000000003,'Proiecte','',3,3,'-16760704',NULL),(0000000004,'Donare Sange','',4,4,'-65408',NULL);
 /*!40000 ALTER TABLE `eveniment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -80,7 +82,7 @@ CREATE TABLE `interval` (
   `dataInceput` datetime DEFAULT NULL,
   `dataSfarsit` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -89,6 +91,7 @@ CREATE TABLE `interval` (
 
 LOCK TABLES `interval` WRITE;
 /*!40000 ALTER TABLE `interval` DISABLE KEYS */;
+INSERT INTO `interval` VALUES (1,'2022-05-25 16:00:00','2022-05-25 18:00:00'),(2,'2022-05-25 12:00:00','2022-05-25 14:00:00'),(3,'2022-05-24 12:00:00','2022-05-24 13:00:00'),(4,'2022-05-28 08:00:03','2022-05-28 11:30:03');
 /*!40000 ALTER TABLE `interval` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -104,7 +107,7 @@ CREATE TABLE `recurenta` (
   `recurenta` int DEFAULT NULL,
   `repetare` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,6 +116,7 @@ CREATE TABLE `recurenta` (
 
 LOCK TABLES `recurenta` WRITE;
 /*!40000 ALTER TABLE `recurenta` DISABLE KEYS */;
+INSERT INTO `recurenta` VALUES (1,10,2),(2,5,3),(3,3,1),(4,3,4);
 /*!40000 ALTER TABLE `recurenta` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -125,4 +129,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-21 13:55:20
+-- Dump completed on 2022-05-24  1:25:41

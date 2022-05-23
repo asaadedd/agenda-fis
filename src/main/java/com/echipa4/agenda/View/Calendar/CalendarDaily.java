@@ -131,7 +131,7 @@ public class CalendarDaily extends Composite {
 				endDateDay = 1;
 			}
 			Date startDate = getDate(0, hour);
-			Date endDate = getDate(endDateDay, endDateHour);
+			Date endDate = getDate(endDateDay, endDateHour);				
 			
 			CalendarEvents label = new CalendarEvents(this, SWT.BORDER | SWT.CENTER, eventController.getEventsForPeriod(events, startDate, endDate));
 			GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1);

@@ -13,81 +13,97 @@ class CalendarControllerTests {
     void addition() {
         assertEquals("Ianuarie", calendarController.getCurrentMonth(0));
     }
-
-@Test
-void getCurrentMonthFeb() {
-    assertEquals("Februarie", calendarController.getCurrentMonth(1));
-}
-
-@Test
-void getCurrentMonthMar() {
-    assertEquals("Martie", calendarController.getCurrentMonth(2));
-}
-@Test
-void getCurrentMonthApr() {
-    assertEquals("Aprilie", calendarController.getCurrentMonth(3));
-}
-@Test
+    
+	@Test
+	void getCurrentMonthFeb() {
+	    assertEquals("Februarie", calendarController.getCurrentMonth(1));
+	}
+	
+	@Test
+	void getCurrentMonthMar() {
+	    assertEquals("Martie", calendarController.getCurrentMonth(2));
+	}
+	
+	@Test
+	void getCurrentMonthApr() {
+	    assertEquals("Aprilie", calendarController.getCurrentMonth(3));
+	}
+	
+	@Test
     void getCurrentMonthMai() {
         assertEquals("Mai", calendarController.getCurrentMonth(4));
     }
-@Test
+	
+	@Test
     void getCurrentMonthIun() {
         assertEquals("Iunie", calendarController.getCurrentMonth(5));
     }
-@Test
+	
+	@Test
     void getCurrentMonthIul() {
         assertEquals("Iulie", calendarController.getCurrentMonth(6));
     }
-@Test
+	
+	@Test
     void getCurrentMonthAug() {
         assertEquals("August", calendarController.getCurrentMonth(7));
     }
-@Test
+	
+	@Test
     void getCurrentMonthSept() {
         assertEquals("Septembrie", calendarController.getCurrentMonth(8));
     }
-@Test
+	
+	@Test
     void getCurrentMonthOct() {
         assertEquals("Octombrie", calendarController.getCurrentMonth(9));
     }
-@Test
+	
+	@Test
     void getCurrentMonthNoi() {
         assertEquals("Noiembrie", calendarController.getCurrentMonth(10));
     }
-@Test
+	
+	@Test
     void getCurrentMonthDec() {
-        assertEquals("Decembrie", calendarController.getCurrentMonth(11));
-        
-}
-@Test
-void getCurrentMonthError() {
-    assertEquals("", calendarController.getCurrentMonth(12));
-}
-@Test
-void getCurrentDayMonday() {
-    assertEquals("Luni", calendarController.getCurrentDay(Calendar.MONDAY));
-}
-@Test
-void getCurrentDayTuesday() {
-    assertEquals("Marti", calendarController.getCurrentDay(Calendar.TUESDAY));
-}
+        assertEquals("Decembrie", calendarController.getCurrentMonth(11)); 
+	}
+	
+	@Test
+	void getCurrentMonthError() {
+	    assertEquals("", calendarController.getCurrentMonth(12));
+	}
+	
+	@Test
+	void getCurrentDayMonday() {
+	    assertEquals("Luni", calendarController.getCurrentDay(Calendar.MONDAY));
+	}
+	
+	@Test
+	void getCurrentDayTuesday() {
+	    assertEquals("Marti", calendarController.getCurrentDay(Calendar.TUESDAY));
+	}
+	
     @Test
     void getCurrentDayWednesday() {
         assertEquals("Miercuri", calendarController.getCurrentDay(Calendar.WEDNESDAY));
     }
+    
     @Test
     void getCurrentDayThursday() {
         assertEquals("Joi", calendarController.getCurrentDay(Calendar.THURSDAY));
     }
+    
     @Test
     void getCurrentDayFriday() {
         assertEquals("Vineri", calendarController.getCurrentDay(Calendar.FRIDAY));
     }
+    
     @Test
     void getCurrentDaySaturday() {
         assertEquals("Sambata", calendarController.getCurrentDay(Calendar.SATURDAY));
     }
+    
     @Test
     void getCurrentDaySunday() {
         assertEquals("Duminica", calendarController.getCurrentDay(Calendar.SUNDAY));
@@ -97,8 +113,21 @@ void getCurrentDayTuesday() {
     void getCurrentDayError() {
         assertEquals("", calendarController.getCurrentDay(0));
     }
-    
-    
+
+    @Test
+    void additionShortMonth() {
+    	assertEquals("Ian", calendarController.getCurrentShortMonth(0));
+    }
+
+    @Test
+    void additionShortMonth1() {
+       assertEquals("Dec", calendarController.getCurrentShortMonth(11));
+    }
+
+    @Test
+    void additionShortMonth2() {
+       assertEquals("Iun", calendarController.getCurrentShortMonth(5));
+    }
 }
 
    

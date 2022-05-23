@@ -1,7 +1,7 @@
 package main.java.com.echipa4.agenda.Model;
 
 public class Recurenta {
-	private Long id;
+	private long id = -1;
 	private int recurenta;
 	private Reperate repetare;
 

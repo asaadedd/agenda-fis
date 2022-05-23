@@ -3,7 +3,7 @@ package main.java.com.echipa4.agenda.Model;
 import java.sql.Date;
 
 public class Interval {
-	private Long id;
+	private long id = -1;
 	private Date dataInceput;
 	private Date dataSfarsit;
 

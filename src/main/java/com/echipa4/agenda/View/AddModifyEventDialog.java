@@ -16,9 +16,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ColorDialog;
 
+import main.java.com.echipa4.agenda.Controller.CalendarController;
 import main.java.com.echipa4.agenda.Controller.EventController;
+import main.java.com.echipa4.agenda.Model.Alarma;
 import main.java.com.echipa4.agenda.Model.Eveniment;
 import main.java.com.echipa4.agenda.Model.Interval;
+import main.java.com.echipa4.agenda.Model.Recurenta;
 import main.java.com.echipa4.agenda.Model.Reperate;
 
 import org.eclipse.swt.layout.GridLayout;
@@ -39,6 +42,7 @@ public class AddModifyEventDialog extends Dialog {
 	protected Shell shell;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	private EventController eventController = EventController.getInstance();
+	private CalendarController calendarController = CalendarController.getInstance();
 	private Text text;
 	private Label lblDescriere;
 	private Text text_1;
@@ -172,11 +176,24 @@ public class AddModifyEventDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				ColorDialog dialog = new ColorDialog(shell, SWT.NONE);
 				
-				color = dialog.open();				
+				color = dialog.open();
+				org.eclipse.swt.graphics.Color backgroundColor = new org.eclipse.swt.graphics.Color(color.red, color.green, color.blue);
+				org.eclipse.swt.graphics.Color textColor = calendarController.getContrastColor(backgroundColor);
+				btnAdaugaCuloare.setBackground(backgroundColor);
+				btnAdaugaCuloare.setForeground(textColor);
 			}
 		});
 		formToolkit.adapt(btnAdaugaCuloare, true, true);
 		btnAdaugaCuloare.setText("Adauga culoare");
+		
+		Color colorOfEvent = eventController.getEvenimentToModify().getCuloare();
+		
+		if (colorOfEvent != null) {
+			org.eclipse.swt.graphics.Color backgroundColor = new org.eclipse.swt.graphics.Color(colorOfEvent.getRed(), colorOfEvent.getGreen(), colorOfEvent.getBlue());
+			org.eclipse.swt.graphics.Color textColor = calendarController.getContrastColor(backgroundColor);
+			btnAdaugaCuloare.setBackground(backgroundColor);
+			btnAdaugaCuloare.setForeground(textColor);
+		}
 	}
 	
 	private void addStartDateInputs() {		
@@ -263,6 +280,7 @@ public class AddModifyEventDialog extends Dialog {
 		});
 		formToolkit.adapt(btnRepetaEveniment, true, true);
 		btnRepetaEveniment.setText("Repetare");
+		btnRepetaEveniment.setSelection(this.eventController.shouldDisplayRepInputs());
 		
 		repLabels.add(new Label(shell, SWT.NONE));
 		repLabels.add(new Label(shell, SWT.NONE));
@@ -276,12 +294,12 @@ public class AddModifyEventDialog extends Dialog {
 		this.setControllVizibility(lblNewLabel_3, this.eventController.shouldDisplayRepInputs(), true);
 		
 		combo = new Combo(shell, SWT.NONE);
-		combo.setItems(new String[] {Reperate.DAILY.toString(), Reperate.WEEKLY.toString(), Reperate.MONTHLY.toString(), Reperate.YEARLY.toString()});
+		String[] comboBoxItems = new String[] {Reperate.DAILY.toString(), Reperate.WEEKLY.toString(), Reperate.MONTHLY.toString(), Reperate.YEARLY.toString()};
+		combo.setItems(comboBoxItems);
 		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 		formToolkit.adapt(combo);
 		formToolkit.paintBordersFor(combo);
 		this.setControllVizibility(combo, this.eventController.shouldDisplayRepInputs(), true);
-		combo.select(1);
 		
 		lblNumarDeRepetari = new Label(shell, SWT.NONE);
 		GridData gd_lblNumarDeRepetari = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -295,6 +313,14 @@ public class AddModifyEventDialog extends Dialog {
 		text_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 		formToolkit.adapt(text_2, true, true);
 		this.setControllVizibility(text_2, this.eventController.shouldDisplayRepInputs(), true);
+		
+		if (this.eventController.shouldDisplayRepInputs()) {
+			Recurenta recurenta = this.eventController.getEvenimentToModify().getRecurenta();
+			text_2.setText(recurenta.getRecurenta() + "");
+			combo.select(recurenta.getReperate().ordinal() - 1);
+		} else {
+			combo.select(1);
+		}
 
 		repLabels.forEach((n) -> this.setControllVizibility(n, this.eventController.shouldDisplayRepInputs(), false));
 	}
@@ -313,6 +339,7 @@ public class AddModifyEventDialog extends Dialog {
 		});
 		formToolkit.adapt(btnCheckButton, true, true);
 		btnCheckButton.setText("Adauga alarma");
+		btnCheckButton.setSelection(this.eventController.shouldDisplayAlarmInputs());
 
 		alarmLabels.add(new Label(shell, SWT.NONE));
 		alarmLabels.add(new Label(shell, SWT.NONE));
@@ -365,6 +392,13 @@ public class AddModifyEventDialog extends Dialog {
 		formToolkit.adapt(text_4, true, true);
 		this.setControllVizibility(text_4, this.eventController.shouldDisplayAlarmInputs(), true);
 		
+
+		if (this.eventController.shouldDisplayAlarmInputs()) {
+			Alarma alarma = this.eventController.getEvenimentToModify().getAlarma();
+			text_4.setText(alarma.getRecurenta() + "");
+			text_3.setText(alarma.getMinutePornire() + "");
+		}
+		
 		alarmLabels.forEach((n) -> this.setControllVizibility(n, this.eventController.shouldDisplayAlarmInputs(), false));
 	}
 	
@@ -411,7 +445,6 @@ public class AddModifyEventDialog extends Dialog {
 				if (color != null) {
 					evenimentToModify.setCuloare(new Color(color.red, color.green, color.blue));
 				}
-				
 
 				eventController.setStartDate(dateTime, dateTime_1);
 				eventController.setEndDate(dateTime_2, dateTime_3);

@@ -14,6 +14,7 @@ import main.java.com.echipa4.agenda.Interfaces.EventViewTypes;
 import main.java.com.echipa4.agenda.Model.Eveniment;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -46,7 +47,6 @@ public class CalendarYearly extends Composite {
 		updateHeaders();
 		updateYear();
 		updateYearNumber();
-		
 
 		eventViewController.addEventViewListener(new EventViewListener() {
 			@Override
@@ -126,6 +126,7 @@ public class CalendarYearly extends Composite {
 				Calendar endDate = getCurrentMonth(index);
 				startDate.add(Calendar.DATE, day);
 				endDate.add(Calendar.DATE, day + 1);
+				
 				ArrayList<Eveniment> dayEvents = eventController.getEventsForPeriod(events, new Date(startDate.getTimeInMillis()), new Date(endDate.getTimeInMillis()));
 				Button dateLabel = new Button(days, SWT.CENTER);
 				GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -265,7 +266,7 @@ public class CalendarYearly extends Composite {
 		cal.setTimeInMillis(currentDate.getTimeInMillis());
 		cal.set(Calendar.DAY_OF_MONTH, 1);
 		cal.set(Calendar.MONTH, month);
-		cal.clear(Calendar.HOUR_OF_DAY);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.clear(Calendar.MINUTE);
 		cal.clear(Calendar.SECOND);
 		cal.clear(Calendar.MILLISECOND);

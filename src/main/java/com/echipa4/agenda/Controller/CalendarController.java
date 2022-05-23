@@ -104,7 +104,7 @@ public class CalendarController {
 		cal.setFirstDayOfWeek(Calendar.MONDAY);
 		cal.setTimeInMillis(currentDate.getTimeInMillis());
 		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.clear(Calendar.HOUR_OF_DAY);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.clear(Calendar.MINUTE);
 		cal.clear(Calendar.SECOND);
 		cal.clear(Calendar.MILLISECOND);

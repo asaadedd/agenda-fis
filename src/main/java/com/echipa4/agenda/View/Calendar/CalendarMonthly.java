@@ -1,6 +1,7 @@
 package main.java.com.echipa4.agenda.View.Calendar;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -168,8 +169,6 @@ public class CalendarMonthly extends Composite {
 			Date startDate = getDate(day);
 			Date endDate = getDate(day + 1);
 			String header = day == 0 ? calendarController.getCurrentShortMonth(currentDate.get(Calendar.MONTH)) + " " + (day + 1) : ( day + 1) + "";
-			System.out.println("startDate " + startDate);
-			System.out.println("endDate " + endDate);
 			CalendarEvents label = new CalendarEvents(this, SWT.BORDER | SWT.CENTER, eventController.getEventsForPeriod(events, startDate, endDate), header);
 			GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 			gridData.widthHint = 150;
@@ -184,13 +183,14 @@ public class CalendarMonthly extends Composite {
 		int daysToAdd = calendarController.getDaysFromPreviousMonth(currentDate);
 	
 		for(int day = 1; day <= daysToAdd; day++) {
-			Date startDate = getDate(0 - day - 1);
-			Date endDate = getDate(0 - day);
 			Calendar previousMonth = Calendar.getInstance();
 			previousMonth.setTimeInMillis(currentDate.getTimeInMillis());
 			previousMonth.add(Calendar.MONTH, -1);
 			int daysInMonth = calendarController.getDaysInMonth(previousMonth);
 			String header = (daysInMonth - daysToAdd + day) + "";
+			Date startDate = getDateForPreviosMonth(daysInMonth - daysToAdd + day -1);
+			Date endDate = getDateForPreviosMonth(daysInMonth - daysToAdd + day);
+			
 			CalendarEvents label = new CalendarEvents(this, SWT.BORDER | SWT.CENTER, eventController.getEventsForPeriod(events, startDate, endDate), header);
 			GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 			gridData.widthHint = 150;
@@ -202,6 +202,14 @@ public class CalendarMonthly extends Composite {
 	
 	private Date getDate(int day) {
 		Calendar firstDayOfMonth = calendarController.getFirstDayOfMonth(currentDate);
+		firstDayOfMonth.add(Calendar.DATE, day);
+		
+		return new Date(firstDayOfMonth.getTimeInMillis());
+	}
+	
+	private Date getDateForPreviosMonth(int day) {
+		Calendar firstDayOfMonth = calendarController.getFirstDayOfMonth(currentDate);
+		firstDayOfMonth.add(Calendar.MONTH, -1);
 		firstDayOfMonth.add(Calendar.DATE, day);
 		
 		return new Date(firstDayOfMonth.getTimeInMillis());

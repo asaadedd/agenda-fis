@@ -1,7 +1,7 @@
 package main.java.com.echipa4.agenda.Model;
 
 public class Alarma {
-	private long id;
+	private long id = -1;
 	private int minutePornire;
 	private int recurenta;
 

@@ -230,7 +230,7 @@ public class EvenimentDao {
 		if (eveniment.getInterval() == null) {
 			return;
 		}
-		if (eveniment.getInterval().getId() == null) {
+		if (eveniment.getInterval().getId() == -1) {
 			insertInterval(eveniment);
 			return;
 		}
@@ -244,7 +244,7 @@ public class EvenimentDao {
 		if (eveniment.getRecurenta() == null) {
 			return;
 		}
-		if (eveniment.getRecurenta().getId() == null) {
+		if (eveniment.getRecurenta().getId() == -1) {
 			insertRecurenta(eveniment);
 			return;
 		}
@@ -258,7 +258,7 @@ public class EvenimentDao {
 		if (eveniment.getAlarma() == null) {
 			return;
 		}
-		if (eveniment.getAlarma().getId() == null) {
+		if (eveniment.getAlarma().getId() == -1) {
 			insertAlarma(eveniment);
 			return;
 		}

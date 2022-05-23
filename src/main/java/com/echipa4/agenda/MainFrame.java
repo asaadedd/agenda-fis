@@ -13,31 +13,6 @@ public class MainFrame {
 	private EventView eventView;
 
 	public static void main(String[] args) {
-//		 Display display = Display.getDefault();
-//	      Shell shell = new Shell ();
-//	      shell.setLayout(new FillLayout());
-//	 	
-//	      // set the size of the scrolled content - method 1
-//	      final ScrolledComposite sc1 = new ScrolledComposite(shell, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-//	      final Composite c1 = new Composite(sc1, SWT.NONE);
-//	      sc1.setContent(c1);
-//	      GridLayout layout = new GridLayout();
-//	      layout.numColumns = 1;
-//	      c1.setLayout(layout);
-//	      Button b1 = new Button (c1, SWT.PUSH);
-//	      b1.setText("first button");
-//	      new Button (c1, SWT.PUSH);
-//	      new Button (c1, SWT.PUSH);
-//	      new Button (c1, SWT.PUSH);
-//	      new Button (c1, SWT.PUSH);
-//	      
-//	      c1.setSize(c1.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-//	 
-//	      shell.open ();
-//	      while (!shell.isDisposed ()) {
-//	          if (!display.readAndDispatch ()) display.sleep ();
-//	      }
-//	      display.dispose ();
 		try {
 			MainFrame window = new MainFrame();
 			window.open();
@@ -53,7 +28,6 @@ public class MainFrame {
 		Display display = Display.getDefault();
 		createContents();
 		shell.open();
-//		shell.layout();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
@@ -72,23 +46,5 @@ public class MainFrame {
 
 		eventView = new EventView(scrolledComposite, SWT.NONE);
 		scrolledComposite.setContent(eventView);
-//		GridData gd_eventToolbar = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-//		gd_eventToolbar.widthHint = 965;
-//		gd_eventToolbar.heightHint = 38;
-//		eventToolbar.setLayoutData(gd_eventToolbar);
-
-//		gd_scrolledComposite.widthHint = 976;
-//		gd_scrolledComposite.heightHint = 299;
-//		scrolledComposite.setLayoutData(gd_scrolledComposite);
-//		GridData gd_scrolledComposite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-//		gd_scrolledComposite.widthHint = 950;
-//		gd_scrolledComposite.heightHint = 700;
-//		scrolledComposite.setLayoutData(gd_scrolledComposite);
-		
-//		GridLayout gridLayout = (GridLayout) eventView.getLayout();
-//		gridLayout.marginWidth = 0;
-//		gridLayout.marginHeight = 0;
-//		gridLayout.horizontalSpacing = 1;
-//		eventView.setSize(eventView.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 }

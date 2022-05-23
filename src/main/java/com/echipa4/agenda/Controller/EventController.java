@@ -2,6 +2,7 @@ package main.java.com.echipa4.agenda.Controller;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -46,8 +47,8 @@ public class EventController {
 		} else {
 			this.eventToModify = event.clone();
 		}
-		this.isAlarmVisible = false;
-		this.isRepVisible = false;
+		this.isAlarmVisible = eventToModify.getAlarma() != null;
+		this.isRepVisible = eventToModify.getRecurenta() != null;
 	}
 	
 	public Eveniment getEvenimentToModify() {
@@ -58,7 +59,7 @@ public class EventController {
 		if (this.eventToModify == null) {
 			return;
 		}
-		
+
 		Interval interval = this.eventToModify.getInterval();
 		
 		if (interval == null) {
@@ -66,9 +67,10 @@ public class EventController {
 			this.eventToModify.setInterval(interval);
 		}
 		
-		Calendar cal = Calendar.getInstance();
-		cal.set(daySelector.getYear(), daySelector.getMonth(), daySelector.getDay(), timeSelector.getHours(), timeSelector.getMinutes());
 		
+		Calendar cal = Calendar.getInstance();
+		cal.set(daySelector.getYear(), daySelector.getMonth(), daySelector.getDay(), timeSelector.getHours(), timeSelector.getMinutes(), timeSelector.getSeconds());
+
 		interval.setDataInceput(new Date(cal.getTimeInMillis()));
 	}
 	
@@ -85,7 +87,7 @@ public class EventController {
 		}
 		
 		Calendar cal = Calendar.getInstance();
-		cal.set(daySelector.getYear(), daySelector.getMonth(), daySelector.getDay(), timeSelector.getHours(), timeSelector.getMinutes());
+		cal.set(daySelector.getYear(), daySelector.getMonth(), daySelector.getDay(), timeSelector.getHours(), timeSelector.getMinutes(), timeSelector.getSeconds());
 		
 		interval.setDataSfarsit(new Date(cal.getTimeInMillis()));
 	}
@@ -140,7 +142,6 @@ public class EventController {
 	
 	public boolean saveEvenimentToAdd() {
 		try {
-			System.out.println(this.eventToModify.getId());
 			if (this.eventToModify.getId() == -1) {
 				EvenimentDao.getInstance().insert(this.eventToModify);
 			} else {
@@ -205,9 +206,12 @@ public class EventController {
     	boolean isBetweenDates = false;
     	
     	for (Period period: periods) {
-    		boolean isBiggerThenStartDate = period.startDate.compareTo(startDate) >= 0;
-    		boolean isLesserThenEndDate = period.endDate.compareTo(endDate) < 0;
-    		isBetweenDates = isBetweenDates || ( isBiggerThenStartDate && isLesserThenEndDate );
+    		boolean isPeriodInsideInterval = startDate.compareTo(period.startDate) >= 0 && endDate.compareTo(period.endDate) <= 0;
+    		boolean isPeriodOutsideInterval = startDate.compareTo(period.startDate) < 0 && endDate.compareTo(period.endDate) > 0;
+    		boolean isStartDateInInterval = startDate.compareTo(period.startDate) >= 0 && startDate.compareTo(period.endDate) < 0;
+    		boolean isEndDateInInterval = endDate.compareTo(period.startDate) > 0 && endDate.compareTo(period.endDate) <= 0;
+    		
+    		isBetweenDates = isBetweenDates || isStartDateInInterval || isEndDateInInterval || isPeriodInsideInterval || isPeriodOutsideInterval;
     	}
     	
     	return isBetweenDates;
@@ -229,20 +233,25 @@ public class EventController {
     private ArrayList<Period> getAllRecurringPeriodsForEvent(Eveniment event) {
     	ArrayList<Period> periods = new ArrayList<Period>();
 		Recurenta recurenta = event.getRecurenta();
+    	Interval interval = event.getInterval();
+    	
+    	if (interval == null || recurenta == null) {
+    		return periods;
+    	}
 		
-		if (recurenta != null) {
-			for(int i=1; i<= recurenta.getRecurenta(); i++) {
-				Calendar periodStartDate = Calendar.getInstance();
-				Calendar periodEndDate = Calendar.getInstance();
-				int periodToAdd = getPeriodToAddFromRecurenta(recurenta);
-				
-				if (periodToAdd != -1) {
-					periodStartDate.add(periodToAdd, i);
-					periodEndDate.add(periodToAdd, i);
-				}
-
-	    		periods.add(new Period(new Date(periodStartDate.getTimeInMillis()), new Date(periodEndDate.getTimeInMillis())));
+		for(int i=1; i<= recurenta.getRecurenta(); i++) {
+			Calendar periodStartDate = Calendar.getInstance();
+			Calendar periodEndDate = Calendar.getInstance();
+			periodStartDate.setTimeInMillis(interval.getDataInceput().getTime());
+			periodEndDate.setTimeInMillis(interval.getDataSfarsit().getTime());
+			int periodToAdd = getPeriodToAddFromRecurenta(recurenta);
+			
+			if (periodToAdd != -1) {
+				periodStartDate.add(periodToAdd, i);
+				periodEndDate.add(periodToAdd, i);
 			}
+
+    		periods.add(new Period(new Date(periodStartDate.getTimeInMillis()), new Date(periodEndDate.getTimeInMillis())));
 		}
     	
     	return periods;

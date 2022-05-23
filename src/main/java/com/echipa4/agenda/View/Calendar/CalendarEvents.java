@@ -45,8 +45,6 @@ public class CalendarEvents extends Composite {
 	        	}
 
 	        	Button label = new Button(this, SWT.CENTER | SWT.WRAP | SWT.PUSH);
-//	            GridData buttonLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
-//	            label.setLayoutData(buttonLayoutData);
 				label.setText(event.getTitlu() + "\n" + startDate + endDate);
 
 				RGB rgb = new RGB(event.getCuloare().getRed(), event.getCuloare().getGreen(), event.getCuloare().getBlue());
@@ -86,8 +84,6 @@ public class CalendarEvents extends Composite {
 	        	}
 
 	        	Button label = new Button(this, SWT.CENTER | SWT.WRAP | SWT.PUSH);
-//	            GridData buttonLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
-//	            label.setLayoutData(buttonLayoutData);
 				label.setText(event.getTitlu() + "\n" + startDate + endDate);
 
 				RGB rgb = new RGB(event.getCuloare().getRed(), event.getCuloare().getGreen(), event.getCuloare().getBlue());

@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 import main.java.com.echipa4.agenda.Model.Interval;
 
@@ -32,7 +33,6 @@ public class IntervalDao {
 	
 	public Interval insert(Interval interval) throws SQLException {
 		Connection c = Mysql.getInstance().getConnection();
-		
 		PreparedStatement pstmt = c.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
 
 		pstmt.setTimestamp(1, new Timestamp(interval.getDataInceput().getTime()));
@@ -57,8 +57,8 @@ public class IntervalDao {
 		
 		PreparedStatement pstmt = c.prepareStatement(UPDATE, PreparedStatement.RETURN_GENERATED_KEYS);
 
-		pstmt.setDate(1, interval.getDataInceput());
-		pstmt.setDate(2, interval.getDataSfarsit());
+		pstmt.setTimestamp(1, new Timestamp(interval.getDataInceput().getTime()));
+		pstmt.setTimestamp(2, new Timestamp(interval.getDataSfarsit().getTime()));
 		pstmt.setLong(3, interval.getId());
 
 		pstmt.executeUpdate();
