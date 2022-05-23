@@ -1,19 +1,34 @@
 package main.java.com.echipa4.agenda.View;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Objects;
 
-import main.java.com.echipa4.agenda.Controller.EventViewController;
-import main.java.com.echipa4.agenda.Controller.EventViewListener;
-import main.java.com.echipa4.agenda.Interfaces.EventViewTypes;
-import main.java.com.echipa4.agenda.View.Calendar.CalendarDaily;
-import main.java.com.echipa4.agenda.View.Calendar.CalendarMonthly;
-import main.java.com.echipa4.agenda.View.Calendar.CalendarWeekly;
-import main.java.com.echipa4.agenda.View.Calendar.CalendarYearly;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+
+import com.ibm.icu.util.Calendar;
+
+import main.java.com.echipa4.agenda.Controller.EventViewController;
+import main.java.com.echipa4.agenda.Controller.EventViewListener;
+import main.java.com.echipa4.agenda.Database.EvenimentDao;
+import main.java.com.echipa4.agenda.Interfaces.EventViewTypes;
+import main.java.com.echipa4.agenda.Model.Alarma;
+import main.java.com.echipa4.agenda.Model.Eveniment;
+import main.java.com.echipa4.agenda.View.Calendar.CalendarDaily;
+import main.java.com.echipa4.agenda.View.Calendar.CalendarMonthly;
+import main.java.com.echipa4.agenda.View.Calendar.CalendarWeekly;
+import main.java.com.echipa4.agenda.View.Calendar.CalendarYearly;
 
 public class EventView extends Composite {
 	private EventViewController eventViewController = EventViewController.getInstance();
@@ -24,6 +39,8 @@ public class EventView extends Composite {
 	private CalendarYearly calendarYearly;
 	private CalendarMonthly calendarMonthly;
 	private CalendarDaily calendarDaily;
+	
+	private Timer alarmTimer;
 	
 	public EventView(Composite parent, int style) {
 		super(parent, style);
@@ -66,6 +83,38 @@ public class EventView extends Composite {
 				setSize(computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			}
 		});
+		
+		alarmTimer = new Timer(1000, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ArrayList<Eveniment> evenimentList = EvenimentDao.getInstance().getEvents();
+					for (Eveniment eveniment : evenimentList) {						
+						if (Objects.isNull(eveniment.getAlarma())) continue;
+						Date eventDate = eveniment.getInterval().getDataInceput();
+						int alarmRec = eveniment.getAlarma().getRecurenta();
+						Long eventDateMillis = eventDate.getTime();
+						Long alarmMillis =  eventDateMillis - (eveniment.getAlarma().getMinutePornire() * 60 * 1000); // diferenta dintre momentul evenimentului si cate minute inainte de eveniment sa apara alarma
+						Date firstAlarmDate = new Date(alarmMillis);
+						
+						Date now = new Date();
+						
+						if(Math.abs(now.getTime() - firstAlarmDate.getTime()) < 500) { // daca sunt intr-un interval de o secunda (+/- 0.5 sec)
+							// display alarm
+							JOptionPane.showMessageDialog(null, eveniment.getDescriere(), eveniment.getTitlu(), JOptionPane.INFORMATION_MESSAGE);
+							System.out.println("ALARM!!!");
+						}
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		
+		alarmTimer.start();
 	    
 		this.updateVizibility();
 	}
