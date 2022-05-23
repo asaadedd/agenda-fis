@@ -62,7 +62,7 @@ public class CalendarController {
 		case Calendar.SATURDAY:
 			return "Sambata";
 		case Calendar.SUNDAY:
-			return "Duminca";
+			return "Duminica";
 		default:
 			return "";
 		}
